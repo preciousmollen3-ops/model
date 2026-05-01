@@ -22,7 +22,9 @@ preprocess = transforms.Compose([
         std=[0.229, 0.224, 0.225]
     )
 ])
-
+@app.post('/')
+  def hello():
+      return{"hie":"model runnig"}
 # Maize disease classes
 class_names = ['Blight', 'Common_Rust', 'Gray_Leaf_Spot', 'Healthy']
 
