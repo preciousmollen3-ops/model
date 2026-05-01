@@ -7,6 +7,23 @@ import torchvision.transforms as transforms
 import torchvision.models as models
 from io import BytesIO
 import numpy as np
+import os
+import gdown
+
+MODEL_URL = "https://drive.google.com/uc?id=11xFLqSZE4MCVbeGoiDZbwX9kJ0VDWQpY"
+MODEL_FILENAME = "maizediseasemodel_final.pth"
+LOCAL_MODEL_PATH = os.path.join(os.path.dirname(__file__), MODEL_FILENAME)
+DOWNLOADS_MODEL_PATH = "C:\\Users\\preci\\Downloads\\maizediseasemodel_final.pth"
+
+if os.path.exists(DOWNLOADS_MODEL_PATH):
+    model_path = DOWNLOADS_MODEL_PATH
+else:
+    model_path = LOCAL_MODEL_PATH
+    if not os.path.exists(model_path):
+        print(f"Downloading model from Google Drive to {model_path}...")
+        gdown.download(MODEL_URL, model_path, quiet=False)
+        if not os.path.exists(model_path):
+            raise RuntimeError(f"Failed to download model from {MODEL_URL}")
 
 app = FastAPI()
 
@@ -18,7 +35,6 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
-model_path = "C:\\Users\\preci\\Downloads\\maizediseasemodel_final.pth"
 
 # Device configuration
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
